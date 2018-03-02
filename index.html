@@ -48,9 +48,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -61,47 +61,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/02/test/" class="article-date">
-  <time datetime="2018-03-02T13:05:19.000Z" itemprop="datePublished">2018-03-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/02/test/">test</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <img src="/2018/03/02/test/load_chart.PNG" title="This is an example image">
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/test/" data-id="cje9h9en90001dejxw0z84bu6" class="article-share-link">Compartir</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-performance_testing" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/03/02/performance_testing/" class="article-date">
-  <time datetime="2018-03-02T05:02:55.485Z" itemprop="datePublished">2018-03-02</time>
+  <time datetime="2018-03-02T05:13:06.455Z" itemprop="datePublished">2018-03-02</time>
 </a>
     
   </div>
@@ -113,7 +76,7 @@
         <hr>
 <h2 id="How-We-Implement-Performance-Testing"><a href="#How-We-Implement-Performance-Testing" class="headerlink" title="How We Implement Performance Testing"></a>How We Implement Performance Testing</h2><p>Different company or product has different performance testing strategy. In this article, I mainly introduce the performance testing method I have experienced. </p>
 <h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Nowadays, the functionality of a product is no doubt an important and integral component in the testing process. But there are response time, reliability, resource usage and stability that do matter as well. Performance testing is a separate type of testing that allows to ensure that software applications will perform without problems under the expected workload. And we usually use performance of software to evaluate the quality of software.<br>Performance testing is not just run tools, although there is a variety of ready-made tools such as jmeter, loadrunner that allow to generate loads, record scripts and run them on a schedule. But before you start doing this, you need to know the basic concepts of performance, design correct scenarios, know the key parameters in performance and how to influence them. Ultimately, this will make the testing more objective and help us to find the issues of software.<br>In next sections, I will introduce the performance testing strategy that I have experienced.</p>
-<h3 id="Performance-Testing-Process"><a href="#Performance-Testing-Process" class="headerlink" title="Performance Testing Process"></a>Performance Testing Process</h3><p>Our performance testing process is shown as chart.<br><img src="performance_testing_flow.PNG" alt="Performance Testing Process " title="Performance Testing Process"><br><img src="/2018/03/02/performance_testing/performance_testing_flow.PNG" title="[Performance Testing Process]"></p>
+<h3 id="Performance-Testing-Process"><a href="#Performance-Testing-Process" class="headerlink" title="Performance Testing Process"></a>Performance Testing Process</h3><p>Our performance testing process is shown as chart.<br><img src="/2018/03/02/performance_testing/performance_testing_flow.PNG" title="[Performance Testing Process]"></p>
 <h4 id="Design-Load-Model"><a href="#Design-Load-Model" class="headerlink" title="Design Load Model"></a>Design Load Model</h4><p>We’ll build product load model at the beginning of performance testing. Load model is a estimation of users’ behavior, we should improve the model according to actual user scenarios. In the load model, we should clarify the capacity(TPS, max connections) of the production and system scale, in addition to, we also need to design different user behavior and user data. </p>
 <h4 id="Define-Pass-Criteria"><a href="#Define-Pass-Criteria" class="headerlink" title="Define Pass Criteria"></a>Define Pass Criteria</h4><p>Pass criteria is the goal of performance testing. Different product should has different pass critieria. For our product, it is a HA system, we defined below metrics.</p>
 <ul>
@@ -167,7 +130,7 @@
 <li><strong><em>Zabbix</em></strong> - collect system data and Visualize them.</li>
 <li><strong><em>Oracle AWR</em></strong> - used to monitor oracle DB.</li>
 </ul>
-<p>The load in a whole test should like below.<br><img src="load_chart.PNG" alt="Load Chart " title="Performance Testing Load"></p>
+<p>The load in a whole test should like below.<br><img src="/2018/03/02/performance_testing/load_chart.PNG" title="[Performance Testing Load]"></p>
 <h4 id="Analyze-Result"><a href="#Analyze-Result" class="headerlink" title="Analyze Result"></a>Analyze Result</h4><p>After performance testing, we need to collect test result and various log, including software log, os log, testing tools log to analyze testing result. Aside from test result, we should pay attention to every error, exception and warning information in software and os logs. These information not only can help us to find software issues, but also can help us to improve our product.</p>
 <h4 id="Gernarate-Performance-Report"><a href="#Gernarate-Performance-Report" class="headerlink" title="Gernarate Performance Report"></a>Gernarate Performance Report</h4><p>After performance testing, we need to generate test report. The report not only can be used as original data of product specification, but also can be used as a benchmark.</p>
 <h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>Performance testing is not just run tools. In this article, I have introduced the most important aspects to implement performance testing of our product. We should keep in mind the fundamentals of performance testing, and also evaluate user behaviors, workflows and be prepared for real-world scenarios.</p>
@@ -180,7 +143,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cje9h9emb0000dejxwmr64gcd" class="article-share-link">Compartir</a>
+      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cje9hh7b00000fpjxueg64w13" class="article-share-link">Share</a>
       
       
     </footer>
@@ -206,7 +169,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archivos</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -216,13 +179,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Posts recientes</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
-        
-          <li>
-            <a href="/2018/03/02/test/">test</a>
-          </li>
         
           <li>
             <a href="/2018/03/02/performance_testing/">(no title)</a>
@@ -241,7 +200,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2018 He Xin<br>
-      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
