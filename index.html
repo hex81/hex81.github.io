@@ -83,116 +83,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>Different company or product has different performance testing strategy. In this article, I mainly introduce the performance testing method I have experienced. </p>
-<h3 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h3><p>Nowadays, the functionality of a product is no doubt an important and integral component in the testing process. But there are response time, reliability, resource usage and stability that do matter as well. Performance testing is a separate type of testing that allows to ensure that software applications will perform without problems under the expected workload. And we usually use performance of software to evaluate the quality of software.<br>Performance testing is not just run tools, although there is a variety of ready-made tools such as jmeter, loadrunner that allow to generate loads, record scripts and run them on a schedule. But before you start doing this, you need to know the basic concepts of performance, design correct scenarios, know the key parameters in performance and how to influence them. Ultimately, this will make the testing more objective and help us to find the issues of software.<br>In next sections, I will introduce the performance testing strategy that I have experienced.</p>
-<h3 id="Performance-Testing-Process"><a href="#Performance-Testing-Process" class="headerlink" title="Performance Testing Process"></a>Performance Testing Process</h3><p>Our performance testing process is shown as chart.<br><img src="/2018/03/02/performance_testing/performance_testing_flow.PNG" title="[Performance Testing Process]"></p>
-<h4 id="Design-Load-Model"><a href="#Design-Load-Model" class="headerlink" title="Design Load Model"></a>Design Load Model</h4><p>We’ll build product load model at the beginning of performance testing. Load model is a estimation of users’ behavior, we should improve the model according to actual user scenarios. In the load model, we should clarify the capacity(TPS, max connections) of the production and system scale, in addition to, we also need to design different user behavior and user data. </p>
-<h4 id="Define-Pass-Criteria"><a href="#Define-Pass-Criteria" class="headerlink" title="Define Pass Criteria"></a>Define Pass Criteria</h4><p>Pass criteria is the goal of performance testing. Different product should has different pass critieria. For our product, it is a HA system, we defined below metrics.</p>
-<ul>
-<li><strong><em>CPU Utilization</em></strong> - High CPU load will impact software behaviour, for our product, the threshhold is 80%.</li>
-<li><strong><em> IO Utilization</em></strong> - High disk IO will impact software behaviour, for our product, the threshhold is 70%.</li>
-<li><strong><em>Memory Utilization</em></strong> - High memory utilization will impact software behavior, for our product, the threshhold is 80%.</li>
-<li><strong><em>Memory Leak</em></strong> - Memory leaks are not allowed. </li>
-<li><strong><em>TPS</em></strong> - The max trascation number per second of software.</li>
-<li><strong><em>Max Connections</em></strong> - The max connections per second of software.</li>
-<li><strong><em>Response Time</em></strong> - For our product, 99% response should be less than 2s, 100% response should be less than 5s.</li>
-<li><strong><em>Processing Delay</em></strong> - The time of software process request.  For different request, processing delay could be different. </li>
-<li><strong><em>Recovery Time</em></strong> - This metrics is used for HA testing with load. Once system is crashed or reboot, the transcation should recover in this time.</li>
-</ul>
-<h4 id="Design-Testing-Model"><a href="#Design-Testing-Model" class="headerlink" title="Design Testing Model"></a>Design Testing Model</h4><p>Performance testing model must follow load model strictly. And we have below test scenarios. For cluster system, we also need to define the number of nodes in testing model. </p>
-<table>
-<thead>
-<tr>
-<th>Load Testing</th>
-<th>Load</th>
-<th>Testing Duration</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Performance Testing</td>
-<td>Performance Load</td>
-<td>2h</td>
-</tr>
-<tr>
-<td>Over Load Testing</td>
-<td>(Performance Load) * 1.2</td>
-<td>2h</td>
-</tr>
-<tr>
-<td>High Load Testing</td>
-<td>(Performance Load) * 2</td>
-<td>2h</td>
-</tr>
-<tr>
-<td>Stability Testing</td>
-<td>Performance Load</td>
-<td>7*24h</td>
-</tr>
-</tbody>
-</table>
-<h4 id="Develop-testing-tools-or-scripts"><a href="#Develop-testing-tools-or-scripts" class="headerlink" title="Develop testing tools or scripts"></a>Develop testing tools or scripts</h4><p>There is a variety of ready-made tools such as jmeter, loadrunner that allow to generate loads, record scripts and run them on a schedule. Aside from these tools, we also developed some tools by C++ and java for our product.</p>
-<h4 id="Set-up-Testing-Environment-amp-Data"><a href="#Set-up-Testing-Environment-amp-Data" class="headerlink" title="Set up Testing Environment &amp; Data"></a>Set up Testing Environment &amp; Data</h4><p>In order to get objective test result, our performance testing environment strictly follow standard customer environment. And the test data should be produced according to load model. Aside from target environment, we also need to pay attention to test tools environment, if test tools environment is not stable under high load, the test result is invalid.</p>
-<h4 id="Implement-Performance-Testing"><a href="#Implement-Performance-Testing" class="headerlink" title="Implement Performance Testing"></a>Implement Performance Testing</h4><p>While the performance testing is running, we need to monitor the whole testing process. Below tools can be used. In order to collect all the key information from logs, we need to enable the debug level in our software log.</p>
-<ul>
-<li><strong><em>operating system tools</em></strong> - linux command, such as <em>sar, iostat, top, vmstat</em>, etc.</li>
-<li><strong><em>Zabbix</em></strong> - collect system data and Visualize them.</li>
-<li><strong><em>Oracle AWR</em></strong> - used to monitor oracle DB.</li>
-</ul>
-<p>The load in a whole test should like below.<br><img src="/2018/03/02/performance_testing/load_chart.PNG" title="[Performance Testing Load]"></p>
-<h4 id="Analyze-Result"><a href="#Analyze-Result" class="headerlink" title="Analyze Result"></a>Analyze Result</h4><p>After performance testing, we need to collect test result and various log, including software log, os log, testing tools log to analyze testing result. Aside from test result, we should pay attention to every error, exception and warning information in software and os logs. These information not only can help us to find software issues, but also can help us to improve our product.</p>
-<h4 id="Gernarate-Performance-Report"><a href="#Gernarate-Performance-Report" class="headerlink" title="Gernarate Performance Report"></a>Gernarate Performance Report</h4><p>After performance testing, we need to generate test report. The report not only can be used as original data of product specification, but also can be used as a benchmark.</p>
-<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p>Performance testing is not just run tools. In this article, I have introduced the most important aspects to implement performance testing of our product. We should keep in mind the fundamentals of performance testing, and also evaluate user behaviors, workflows and be prepared for real-world scenarios.</p>
-<h3 id="Common-Performance-Index"><a href="#Common-Performance-Index" class="headerlink" title="Common Performance Index"></a>Common Performance Index</h3><ul>
-<li><strong><em>TPS</em></strong> - connections / (transaction time)</li>
-<li><strong><em>Max Connections</em></strong> - Max connections at the same time.</li>
-<li><strong><em>IO Utilization</em></strong> - (disk read/write time per time) <em> (disk read/write times per second) </em> 100%</li>
-</ul>
-
+        <p>Different company or product has different performance testing strategy. In this article, I mainly introduce the performance testing method I have experienced.<br>
+        
+          <p class="article-more-link">
+            <a href="/2018/03/02/performance_testing/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cje9hxza10000p3jxp1koqd7c" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cje9i6prw0000r6jxkap4g7ab" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/03/02/test/" class="article-date">
-  <time datetime="2018-03-02T13:20:30.000Z" itemprop="datePublished">2018-03-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/03/02/test/">test</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/test/" data-id="cje9hxzae0001p3jxhdjyo40r" class="article-share-link">Teilen</a>
-      
-      
     </footer>
   </div>
   
@@ -246,10 +150,6 @@
         
           <li>
             <a href="/2018/03/02/performance_testing/">How We Implement Performance Testing</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/02/test/">test</a>
           </li>
         
       </ul>
