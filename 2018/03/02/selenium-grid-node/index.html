@@ -7,17 +7,17 @@
   
   <title>How To Get Selenium Node IP Of Test Is Running | He Xin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname. Get Selenium Grid Node IP1. Get Sessi">
+  <meta name="description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
 <meta name="keywords" content="selenium">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How To Get Selenium Node IP Of Test Is Running">
 <meta property="og:url" content="http://yoursite.com/2018/03/02/selenium-grid-node/index.html">
 <meta property="og:site_name" content="He Xin&#39;s Blog">
-<meta property="og:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname. Get Selenium Grid Node IP1. Get Sessi">
-<meta property="og:updated_time" content="2018-03-02T08:15:08.505Z">
+<meta property="og:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
+<meta property="og:updated_time" content="2018-03-02T08:16:31.218Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="How To Get Selenium Node IP Of Test Is Running">
-<meta name="twitter:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname. Get Selenium Grid Node IP1. Get Sessi">
+<meta name="twitter:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
   
     <link rel="alternate" href="/atom.xml" title="He Xin&#39;s Blog" type="application/atom+xml">
   
@@ -53,9 +53,9 @@
       </nav>
       <nav id="sub-nav">
         
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -86,7 +86,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.</p>
+        <p>When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.<br><a id="more"></a></p>
 <h4 id="Get-Selenium-Grid-Node-IP"><a href="#Get-Selenium-Grid-Node-IP" class="headerlink" title="Get Selenium Grid Node IP"></a>Get Selenium Grid Node IP</h4><h5 id="1-Get-Session-ID"><a href="#1-Get-Session-ID" class="headerlink" title="1. Get Session ID"></a>1. Get Session ID</h5><p>If we use selenium grid for our automation testing. We can use <em>browser.driver.session_id</em> to get the ongoing session id.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session_id = browser.driver.session_id</span><br></pre></td></tr></table></figure></p>
 <h5 id="2-Get-Node-IP"><a href="#2-Get-Node-IP" class="headerlink" title="2. Get Node IP"></a>2. Get Node IP</h5><p>Once we get the session id, we can use below request to get session information.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//&lt;grid_hub_name&gt;:&lt;grid_hub_port&gt;/grid/api/testsession?session=&lt;session_id&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>The response is shown like below.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"internalKey"</span>: <span class="string">"83d5756e-7eec-4a26-abc6-233be258eedb"</span>,</span><br><span class="line">	<span class="attr">"session"</span>: <span class="string">"9afaf48c-4754-48c7-a661-31c3ba37a98"</span>,</span><br><span class="line">	<span class="attr">"inactivityTime"</span>: <span class="number">119</span>,</span><br><span class="line">	<span class="attr">"proxyId"</span>: <span class="string">"http://192.168.1.25:5555"</span>, </span><br><span class="line">	<span class="attr">"msg"</span>: <span class="string">"slot found !"</span>,<span class="attr">"success"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
@@ -96,7 +96,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cje9nytge00017jjxnrmvi6md" class="article-share-link">Partager</a>
+      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cje9o0kuz00009tjx7q8yx95q" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/">selenium</a></li></ul>
@@ -109,7 +109,7 @@
   
   
     <a href="/2018/03/02/performance_testing/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Ancien</strong>
+      <strong class="article-nav-caption">Älter</strong>
       <div class="article-nav-title">How We Implement Performance Testing</div>
     </a>
   
@@ -127,7 +127,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Mot-clés</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/">selenium</a></li></ul>
     </div>
@@ -137,7 +137,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Nuage de mot-clés</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/selenium/" style="font-size: 10px;">selenium</a>
     </div>
@@ -146,7 +146,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -156,7 +156,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Articles récents</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
         
@@ -181,7 +181,7 @@
   <div class="outer">
     <div id="footer-info" class="inner">
       &copy; 2018 He Xin<br>
-      Propulsé par <a href="http://hexo.io/" target="_blank">Hexo</a>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
 </footer>
