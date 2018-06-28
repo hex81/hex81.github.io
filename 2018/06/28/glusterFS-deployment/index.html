@@ -7,16 +7,16 @@
   
   <title>How To Deploy GlusterFS | He Xin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.  Install GlusterFSRun below steps on ea">
+  <meta name="description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="How To Deploy GlusterFS">
 <meta property="og:url" content="http://yoursite.com/2018/06/28/glusterFS-deployment/index.html">
 <meta property="og:site_name" content="He Xin&#39;s Blog">
-<meta property="og:description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.  Install GlusterFSRun below steps on ea">
-<meta property="og:updated_time" content="2018-06-28T09:42:32.383Z">
+<meta property="og:description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.">
+<meta property="og:updated_time" content="2018-06-28T10:04:51.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="How To Deploy GlusterFS">
-<meta name="twitter:description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.  Install GlusterFSRun below steps on ea">
+<meta name="twitter:description" content="Prerequisites At least two machines, each of them has at least 1G memory. At least two disks, one for the base OS and one that we will use as a Gluster “brick”.">
   
     <link rel="alternate" href="/atom.xml" title="He Xin&#39;s Blog" type="application/atom+xml">
   
@@ -58,7 +58,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -93,6 +93,7 @@
 <li>At least two machines, each of them has at least 1G memory.</li>
 <li>At least two disks, one for the base OS and one that we will use as a Gluster “brick”.</li>
 </ul>
+<a id="more"></a>
 <h3 id="Install-GlusterFS"><a href="#Install-GlusterFS" class="headerlink" title="Install GlusterFS"></a>Install GlusterFS</h3><p>Run below steps on each node.</p>
 <ol>
 <li><p>Download the packages (modify URL for your specific release and architecture). </p>
@@ -171,7 +172,7 @@ Command (m for help):
 <pre><code># echo &quot;/dev/vdb1 /export/disk1 xfs defaults,noatime,inode64 0 0&quot;  &gt;&gt; /etc/fstab
 </code></pre></li>
 </ol>
-<p>###Configuring Gluster Server<br>Choose a server to be your “primary” node. The following steps just only run in “primary” node. </p>
+<h3 id="Configuring-Gluster-Server"><a href="#Configuring-Gluster-Server" class="headerlink" title="Configuring Gluster Server"></a>Configuring Gluster Server</h3><p>Choose a server to be your “primary” node. The following steps just only run in “primary” node. </p>
 <ol>
 <li><p>Configure the trusted pool. Remember that the trusted pool is the term used to define a cluster of nodes in Gluster.</p>
 <pre><code># gluster peer probe &lt;hostname_of_node2&gt;
@@ -203,7 +204,7 @@ Command (m for help):
 # gluster volume set gv0 eager-lock on
 </code></pre></li>
 </ol>
-<p>###Configuring Gluster Client<br>Run below steps on each node.</p>
+<h3 id="Configuring-Gluster-Client"><a href="#Configuring-Gluster-Client" class="headerlink" title="Configuring Gluster Client"></a>Configuring Gluster Client</h3><p>Run below steps on each node.</p>
 <ol>
 <li><p>Add the FUSE loadable kernel module(LKM) to the Linux kernel.</p>
 <pre><code># modprobe fuse
@@ -218,8 +219,7 @@ Command (m for help):
 <pre><code># mount -t glusterfs &lt;hostname_node_1&gt;:/gv0 /storage
 </code></pre></li>
 </ol>
-<p>###FAQ</p>
-<ol>
+<h3 id="FAQ"><a href="#FAQ" class="headerlink" title="FAQ"></a>FAQ</h3><ol>
 <li><p>Gluster can’t start if the old info exists.</p>
 <pre><code># cd /var/lib/glusterd/
 # rm -rf glusterd.info
@@ -264,7 +264,7 @@ Command (m for help):
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="cjiy94ehc00008ijxn9l4snms" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="cjiydvbta0000rbjxz046w6t3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -275,7 +275,7 @@ Command (m for help):
   
   
     <a href="/2018/03/02/selenium-grid-node/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
+      <strong class="article-nav-caption">Älter</strong>
       <div class="article-nav-title">How To Get Selenium Node IP Of Test Is Running</div>
     </a>
   
@@ -312,7 +312,7 @@ Command (m for help):
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -322,7 +322,7 @@ Command (m for help):
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
         

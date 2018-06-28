@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -91,178 +91,15 @@
 <li>At least two machines, each of them has at least 1G memory.</li>
 <li>At least two disks, one for the base OS and one that we will use as a Gluster “brick”.</li>
 </ul>
-<h3 id="Install-GlusterFS"><a href="#Install-GlusterFS" class="headerlink" title="Install GlusterFS"></a>Install GlusterFS</h3><p>Run below steps on each node.</p>
-<ol>
-<li><p>Download the packages (modify URL for your specific release and architecture). </p>
-<pre><code>http://download.gluster.org/pub/gluster/glusterfs/3.4/3.4.5/RHEL/epel-6.5/x86_64/    
-</code></pre></li>
-<li><p>Download the dependency packages.</p>
-<pre><code>ftp://ftp.pbone.net/mirror/ftp5.gwdg.de/pub/opensuse/repositories/home:/billcavalieri:/QEMU/RedHat_RHEL-6/x86_64/xfsprogs-3.1.1-4.1.x86_64.rpm
-</code></pre></li>
-<li><p>Install the packages.</p>
-<pre><code># rpm -e openssl-1.0.0-27.el6_4.2.x86_64 --nodeps 
-# rpm -ivh openssl-1.0.1e-16.el6_5.7.x86_64.rpm –nodeps
-# yum install xfsprogs-3.1.1-4.1.x86_64.rpm
-# yum install glusterfs-libs-3.5.2-1.el6.x86_64.rpm glusterfs-cli-3.5.2-1.el6.x86_64.rpm
-# yum install glusterfs-api-3.5.2-1.el6.x86_64.rpm glusterfs-3.5.2-1.el6.x86_64.rpm glusterfs-fuse-3.5.2-1.el6.x86_64.rpm glusterfs-server-3.5.2-1.el6.x86_64.rpm
-</code></pre></li>
-<li><p>Start the services, and set to start at boot.</p>
-<pre><code># /etc/init.d/glusterd start
-# chkconfig glusterd on
-</code></pre></li>
-</ol>
-<h3 id="Pre-Configuring"><a href="#Pre-Configuring" class="headerlink" title="Pre-Configuring"></a>Pre-Configuring</h3><p>Run below steps on each node.</p>
-<ol>
-<li><p>Check the current mode of SELinux. If the current mode is “enforcing” mode, need to change it to either “permissive” or “disabled” mode. Otherwise, skip this step. Change “/etc/selinux/config” and set “SELINUX=permissive” or “SELINUX=disabled” so that the changes are permanent.</p>
-<pre><code># getenforce
-# setenforce  0
-</code></pre></li>
-<li><p>Enable server can communicate with each other.</p>
-</li>
-<li><p>Partition the disk, assuming that you have a disk /dev/vdb.</p>
-<ol>
-<li><p>Create a single partition on /dev/vdb.</p>
-<pre><code># fdisk /dev/vdb
-Device contains neither a valid DOS partition table, nor Sun, SGI or OSF disklabel
-Building a new DOS disklabel with disk identifier 0xa0399863.
-Changes will remain in memory only, until you decide to write them.
-After that, of course, the previous content won&apos;t be recoverable.
-Warning: invalid flag 0x0000 of partition table 4 will be corrected by w(rite)
-WARNING: DOS-compatible mode is deprecated. It&apos;s strongly recommended to
-switch off the mode (command &apos;c&apos;) and change display units to sectors (command &apos;u&apos;).
-Command (m for help):
-</code></pre></li>
-<li><p>Press n, then press Enter.The following information is displayed:</p>
-<pre><code>Command action
-    e   extended
-    p   primary partition (1-4)
-</code></pre></li>
-<li><p>Press p and press Enter. The following information is displayed:</p>
-<pre><code>Partition number (1-4):
-</code></pre></li>
-<li><p>Press 1 and press Enter. The following information is displayed:</p>
-<pre><code>First cylinder (1-2080, default 1):
-</code></pre></li>
-<li><p>Press Enter and continue. The following information is displayed:</p>
-<pre><code>Using default value 1
-Last cylinder, +cylinders or +size{K,M,G} (1-2080, default 2080):
-</code></pre></li>
-<li><p>Press Enter. The following information is displayed:</p>
-<pre><code>Using default value 2080
-Command (m for help):
-</code></pre><ol>
-<li><p>Press p to check and then press w to save.</p>
-<p>  Command (m for help): p<br>  Disk /dev/vdb: 1073 MB, 1073741824 bytes<br>  16 heads, 63 sectors/track, 2080 cylinders<br>  Units = cylinders of 1008 * 512 = 516096 bytes<br>  Sector size (logical/physical): 512 bytes / 512 bytes<br>  I/O size (minimum/optimal): 512 bytes / 512 bytes<br>  Disk identifier: 0xa0399863  </p>
-<p>  Device Boot         Start         End      Blocks   Id  System<br>   /dev/vdb1               1        2080     1048288+  83  Linux<br>   Command (m for help): w</p>
-</li>
-</ol>
-</li>
-</ol>
-</li>
-<li><p>Format the partition.</p>
-<pre><code># mkfs.xfs -f -i size=512 -n size=8192 -d su=64k,sw=4 /dev/vdb1
-</code></pre></li>
-<li><p>Mount the partition.</p>
-<pre><code># mkdir -p /export/disk1 &amp;&amp; mount -t xfs -o noatime,inode64 /dev/vdb1 /export/disk1 &amp;&amp; mkdir -p /export/disk1/brick
-</code></pre></li>
-<li><p>Add en entry to /etc/fstab:        </p>
-<pre><code># echo &quot;/dev/vdb1 /export/disk1 xfs defaults,noatime,inode64 0 0&quot;  &gt;&gt; /etc/fstab
-</code></pre></li>
-</ol>
-<p>###Configuring Gluster Server<br>Choose a server to be your “primary” node. The following steps just only run in “primary” node. </p>
-<ol>
-<li><p>Configure the trusted pool. Remember that the trusted pool is the term used to define a cluster of nodes in Gluster.</p>
-<pre><code># gluster peer probe &lt;hostname_of_node2&gt;
-</code></pre></li>
-<li><p>Set up a replicated volume.</p>
-<pre><code># gluster volume create gv0 replica 2 &lt;hostname_of_node1&gt;:/export/disk1/brick &lt;hostname_of_node2&gt;:/export/disk1/brick
-</code></pre></li>
-<li><p>Check the volume we created.</p>
-<pre><code># gluster volume info
-
- Volume Name: gv0
- Type: Replicate
- Volume ID: 8bc3e96b-a1b6-457d-8f7a-a91d1d4dc019
- Status: Created
- Number of Bricks: 1 x 2 = 2
- Transport-type: tcp
- Bricks:
- Brick1: node01:/export/disk1/brick
- Brick2: node02:/export/disk1/brick
-</code></pre></li>
-<li><p>Start the volume. </p>
-<pre><code># gluster volume start gv0
-</code></pre></li>
-<li><p>Set the volume options.(Option)</p>
-<pre><code># gluster volume set gv0 performance.cache-size 16GB
-# gluster volume set gv0 performance.io-thread-count 64
-# gluster volume set gv0 performance.cache-refresh-timeout 60
-# gluster volume set gv0 performance.client-io-threads on
-# gluster volume set gv0 eager-lock on
-</code></pre></li>
-</ol>
-<p>###Configuring Gluster Client<br>Run below steps on each node.</p>
-<ol>
-<li><p>Add the FUSE loadable kernel module(LKM) to the Linux kernel.</p>
-<pre><code># modprobe fuse
-</code></pre></li>
-<li><p>Verify that the FUSE module is loaded.</p>
-<pre><code># dmesg |grep fuse
-</code></pre></li>
-<li><p>Create the mount directory.</p>
-<pre><code># mkdir /storage
-</code></pre></li>
-<li><p>Mount glusterfs.</p>
-<pre><code># mount -t glusterfs &lt;hostname_node_1&gt;:/gv0 /storage
-</code></pre></li>
-</ol>
-<p>###FAQ</p>
-<ol>
-<li><p>Gluster can’t start if the old info exists.</p>
-<pre><code># cd /var/lib/glusterd/
-# rm -rf glusterd.info
-# rm -rf vols/*
-# cd /var/lib/glusterd/glustershd
-# rm -rf glustershd-server.vol
-# /etc/init.d/glusterd restart
-</code></pre></li>
-<li><p>Stop &amp; delete volume.</p>
-<pre><code># gluster volume stop gv0 force
-# gluster volume delete gv0
-</code></pre></li>
-<li><p>Expanding Volumes.</p>
-<ol>
-<li><p>On the first server in the cluster, probe the server to which you want to add the new brick using the following command:</p>
-<pre><code># gluster peer probe HOSTNAME
-</code></pre></li>
-<li><p>Add the brick using the following command:</p>
-<pre><code># gluster volume add-brick gv0  &lt;hostname_of_node&gt;:/export/disk1/brick
-</code></pre></li>
-<li><p>Check the volume information using the following command:</p>
-<pre><code># gluster volume info
-</code></pre></li>
-<li><p>Re-balance the volume to ensure that all files are visible at the mount point.</p>
-<pre><code># gluster volume rebalance gv0 start
-</code></pre></li>
-</ol>
-</li>
-<li><p>Path or a prefix of it is already part of a volume.</p>
-<ol>
-<li><p>For the directory (or any parent directories) that was formerly part of a volume. Don’t worry if it says that the attribute does not exist. As long as it doesn’t exist, you’re in good shape.</p>
-<pre><code># setfattr -x trusted.glusterfs.volume-id $brick_path
-# setfattr -x trusted.gfid $brick_path
-# rm -rf $brick_path/.glusterfs
-</code></pre></li>
-<li><p>Finally, restart glusterd to ensure it’s not “remembering” the old bricks.</p>
-</li>
-</ol>
-</li>
-</ol>
-
+        
+          <p class="article-more-link">
+            <a href="/2018/06/28/glusterFS-deployment/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="cjiy94ehc00008ijxn9l4snms" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="cjiydvbta0000rbjxz046w6t3" class="article-share-link">Teilen</a>
       
       
     </footer>
@@ -303,7 +140,7 @@ Command (m for help):
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cjiy94eig00028ijxwsljlg7s" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cjiydvbti0001rbjxigqmzscx" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/">selenium</a></li></ul>
@@ -346,7 +183,7 @@ Command (m for help):
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cjiy94ei900018ijx5hkqml8w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cjiydvbto0002rbjxo5wmclac" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
@@ -388,7 +225,7 @@ Command (m for help):
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">Archiv</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -398,7 +235,7 @@ Command (m for help):
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">letzter Beitrag</h3>
     <div class="widget">
       <ul>
         
