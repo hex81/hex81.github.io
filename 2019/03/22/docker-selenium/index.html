@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Dockerize Automation Test with Selenium | He Xin&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will des">
+<meta name="keywords" content="virtualization, selenium">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dockerize Automation Test with Selenium">
+<meta property="og:url" content="http://yoursite.com/2019/03/22/docker-selenium/index.html">
+<meta property="og:site_name" content="He Xin&#39;s Blog">
+<meta property="og:description" content="Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will des">
+<meta property="og:updated_time" content="2019-03-22T08:00:40.500Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dockerize Automation Test with Selenium">
+<meta name="twitter:description" content="Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will des">
+  
+    <link rel="alternate" href="/atom.xml" title="He Xin&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">He Xin&#39;s Blog</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Code is cheap, show me the product</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Buscar"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-docker-selenium" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/22/docker-selenium/" class="article-date">
+  <time datetime="2019-03-22T14:02:17.000Z" itemprop="datePublished">2019-03-22</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Dockerize Automation Test with Selenium
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will describe the detail steps.<br><a id="more"></a></p>
+<h4 id="Overview"><a href="#Overview" class="headerlink" title="Overview:"></a>Overview:</h4><p>We will be performing the following steps:</p>
+<ol>
+<li>Creating a Dockerfile</li>
+<li>Build the Docker image</li>
+<li>Creating a container and running Selenium tests</li>
+</ol>
+<h4 id="Create-a-Dockerfile-for-automation-with-selenium"><a href="#Create-a-Dockerfile-for-automation-with-selenium" class="headerlink" title="Create a Dockerfile for automation with selenium"></a>Create a Dockerfile for automation with selenium</h4><p>To get setup with Docker CE you can refer to this <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">link</a> . To build a Docker image for running our selenium tests, we needed to perform the following steps:</p>
+<ol>
+<li>Pull a Base image</li>
+<li>Install Xvfb virtual/headless display</li>
+<li>Setup Chrome and Chrome driver</li>
+<li>Setup Firefox and Geckodrivers</li>
+<li>Install requirements with pip</li>
+</ol>
+<p>We will code these steps into a file called a Dockerfile. A Dockerfile is a text document that contains all the commands a user could execute on the command line to assemble an image. </p>
+<p>#####Pull python3.5 image<br>    FROM python:3.5<br>    MAINTAINER xxxxxxxx@xxxx.com</p>
+<p>#####Install necessary packages.<br>    RUN apt-get update &amp;&amp; apt-get install -yq \<br>        software-properties-common \<br>        curl \<br>        firefox-esr \<br>        vim \<br>        xvfb \<br>        xsel \<br>        unzip \<br>        libgconf2-4 \<br>        libncurses5 \<br>        libxml2-dev \<br>        libxslt-dev \<br>        libz-dev \<br>        xclip \<br>        net-tools \<br>        dbus</p>
+<p>#####Install webdriver &amp; Chrome</p>
+<pre><code># GeckoDriver v0.24.0
+RUN wget -q &quot;https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz&quot; -O /tmp/geckodriver.tgz \
+    &amp;&amp; tar zxf /tmp/geckodriver.tgz -C /usr/bin/ \
+    &amp;&amp; rm /tmp/geckodriver.tgz \
+    &amp;&amp; chmod 777 /usr/bin/geckodriver
+
+# Install Chrome
+RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub -o /tmp/google.pub \
+    &amp;&amp; cat /tmp/google.pub | apt-key add -; rm /tmp/google.pub \
+    &amp;&amp; echo &apos;deb http://dl.google.com/linux/chrome/deb/ stable main&apos; &gt; /etc/apt/sources.list.d/google.list \
+    &amp;&amp; apt-get -y update &amp;&amp; apt-get install -y google-chrome-stable
+
+# Install Chrome driver
+RUN curl http://chromedriver.storage.googleapis.com/2.46/chromedriver_linux64.zip -o /tmp/chromedriver_linux64.zip \
+    &amp;&amp; cd /tmp; unzip /tmp/chromedriver_linux64.zip; rm -rf chromedriver_linux64.zip; cp chromedriver /usr/bin/chromedriver \
+    &amp;&amp; ln -fs /usr/bin/chromedriver /usr/local/bin/chromedriver \
+    &amp;&amp; chmod 777 /usr/bin/chromedriver
+</code></pre><p>#####Configure Xvfb virtual/headless display</p>
+<pre><code># xvfb - X server display
+ADD xvfb-chromium /usr/bin/xvfb-chromium
+RUN dpkg-divert --add --rename --divert /usr/bin/google-chrome.real /usr/bin/google-chrome \
+    &amp;&amp; ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome \
+    &amp;&amp; chmod 777 /usr/bin/xvfb-chromium
+
+RUN echo &quot;export DISPLAY=:20&quot; &gt;&gt; /root/.bashrc \
+    &amp;&amp; echo &quot;Xvfb :20 -screen 0 1280x720x16 &amp;&quot; &gt;&gt; /root/.bashrc \
+    &amp;&amp; echo &quot;service dbus start&quot; &gt;&gt; /root/.bashrc
+</code></pre><p>#####Set project dir</p>
+<pre><code># create project folder with the name VxRailProjects
+RUN mkdir /automation
+
+# project scope
+WORKDIR /automation
+RUN echo &quot;export PYTHONPATH=/VxRailProjects&quot; &gt;&gt; /root/.bashrc
+</code></pre><p>#####Install requirements packages &amp; auto framework<br>    COPY requirements.txt /tmp/requirements.txt<br>    RUN pip install -r /tmp/requirements.txt</p>
+<p>####Build/Pull the Docker image:</p>
+<pre><code># sudo docker build -t=automation_app &lt;path/to/dockerfile&gt;
+</code></pre><p>####Creating a container and running Selenium tests</p>
+<p>#####Prepare test file selenium_docker.py, save to /code<br>    from selenium import webdriver</p>
+<pre><code>driver = webdriver.Chrome()
+driver.get(&quot;http://www.google.com&quot;)
+print(driver.title)
+driver.quit()
+</code></pre><p>#####Run an automation container</p>
+<pre><code># sudo docker run -it -v /code:/automation --name automation &lt;image name&gt; /bin/bash
+</code></pre><h5 id="Run-tests"><a href="#Run-tests" class="headerlink" title="Run      tests."></a>Run      tests.</h5><pre><code># cd /automation
+# python selenium_docker.py
+</code></pre><p>####Appendix:</p>
+<h5 id="Xvfb-chromium-is-shown-as-below"><a href="#Xvfb-chromium-is-shown-as-below" class="headerlink" title="Xvfb-chromium is shown as below."></a>Xvfb-chromium is shown as below.</h5><pre><code>#!/bin/bash
+_kill_procs() {
+kill -TERM $chromium
+wait $chromium
+kill -TERM $xvfb
+}
+
+# Setup a trap to catch SIGTERM and relay it to child processes
+trap _kill_procs SIGTERM
+
+XVFB_WHD=${XVFB_WHD:-1280x720x16}
+
+# Start Xvfb
+Xvfb :99 -ac -screen 0 $XVFB_WHD -nolisten tcp &amp;
+xvfb=$!
+
+export DISPLAY=:99
+
+exec /usr/bin/google-chrome-stable --no-sandbox --headless --disable-setuid-sandbox --disable-dev-shm-usage $@
+chromium=$!
+
+wait $chromium
+wait $xvfb
+</code></pre><h5 id="Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything"><a href="#Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything" class="headerlink" title="Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything"></a>Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything</h5><p>######1. Find DNS </p>
+<pre><code># nmcli dev show | grep &apos;IP4.DNS&apos;
+If above result is None. 
+# cat /etc/resolv.conf | grep name
+</code></pre><p>######2. Put dns in /etc/docker/daemon.json<br>    {<br>        “dns”: [“10.0.0.2”, “10.0.0.3”]<br>    }  </p>
+<p>######3. Restart Docker service.</p>
+<pre><code># sudo service docker restart
+</code></pre>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2019/03/22/docker-selenium/" data-id="cjtjrz4le0000jjjx2i9gy9t3" class="article-share-link">Compartir</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization-selenium/">virtualization, selenium</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/06/28/glusterFS-deployment/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Viejo</strong>
+      <div class="article-nav-title">How To Deploy GlusterFS</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualization-selenium/">virtualization, selenium</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Nube de Tags</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Test/" style="font-size: 10px;">Test</a> <a href="/tags/selenium/" style="font-size: 10px;">selenium</a> <a href="/tags/virtualization-selenium/" style="font-size: 10px;">virtualization, selenium</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archivos</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Posts recientes</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/03/22/docker-selenium/">Dockerize Automation Test with Selenium</a>
+          </li>
+        
+          <li>
+            <a href="/2018/06/28/glusterFS-deployment/">How To Deploy GlusterFS</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/selenium-grid-node/">How To Get Selenium Node IP Of Test Is Running</a>
+          </li>
+        
+          <li>
+            <a href="/2018/03/02/performance_testing/">How We Implement Performance Testing</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 He Xin<br>
+      Construido por <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
