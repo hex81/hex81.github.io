@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/03/22/docker-selenium/index.html">
 <meta property="og:site_name" content="He Xin&#39;s Blog">
 <meta property="og:description" content="Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will des">
-<meta property="og:updated_time" content="2019-03-22T08:04:52.330Z">
+<meta property="og:updated_time" content="2019-03-22T08:08:34.780Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dockerize Automation Test with Selenium">
 <meta name="twitter:description" content="Recently we want to improve our test environment efficiency. We decided to use Docker to isolate our Selenium tests, so I built a Docker container for running our Selenium tests. This artical will des">
@@ -106,10 +106,25 @@
 <li>Install requirements with pip</li>
 </ol>
 <p>We will code these steps into a file called a Dockerfile. A Dockerfile is a text document that contains all the commands a user could execute on the command line to assemble an image. </p>
-<p>#####Pull python3 image<br>    FROM python:3.5<br>    MAINTAINER xxxxxxxx@xxxx.com</p>
-<p>#####Install necessary packages.<br>    RUN apt-get update &amp;&amp; apt-get install -yq \<br>        software-properties-common \<br>        curl \<br>        firefox-esr \<br>        vim \<br>        xvfb \<br>        xsel \<br>        unzip \<br>        libgconf2-4 \<br>        libncurses5 \<br>        libxml2-dev \<br>        libxslt-dev \<br>        libz-dev \<br>        xclip \<br>        net-tools \<br>        dbus</p>
-<p>#####Install webdriver and Chrome</p>
-<pre><code># GeckoDriver v0.24.0
+<h5 id="Pull-python3-image"><a href="#Pull-python3-image" class="headerlink" title="Pull python3 image"></a>Pull python3 image</h5><pre><code>FROM python:3.5
+MAINTAINER xxxxxxxx@xxxx.com
+</code></pre><h5 id="Install-necessary-packages"><a href="#Install-necessary-packages" class="headerlink" title="Install necessary packages."></a>Install necessary packages.</h5><pre><code>RUN apt-get update &amp;&amp; apt-get install -yq \
+    software-properties-common \
+    curl \
+    firefox-esr \
+    vim \
+    xvfb \
+    xsel \
+    unzip \
+    libgconf2-4 \
+    libncurses5 \
+    libxml2-dev \
+    libxslt-dev \
+    libz-dev \
+    xclip \
+    net-tools \
+    dbus
+</code></pre><h5 id="Install-webdriver-and-Chrome"><a href="#Install-webdriver-and-Chrome" class="headerlink" title="Install webdriver and Chrome"></a>Install webdriver and Chrome</h5><pre><code># GeckoDriver v0.24.0
 RUN wget -q &quot;https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz&quot; -O /tmp/geckodriver.tgz \
     &amp;&amp; tar zxf /tmp/geckodriver.tgz -C /usr/bin/ \
     &amp;&amp; rm /tmp/geckodriver.tgz \
@@ -126,8 +141,7 @@ RUN curl http://chromedriver.storage.googleapis.com/2.46/chromedriver_linux64.zi
     &amp;&amp; cd /tmp; unzip /tmp/chromedriver_linux64.zip; rm -rf chromedriver_linux64.zip; cp chromedriver /usr/bin/chromedriver \
     &amp;&amp; ln -fs /usr/bin/chromedriver /usr/local/bin/chromedriver \
     &amp;&amp; chmod 777 /usr/bin/chromedriver
-</code></pre><p>#####Configure Xvfb virtual/headless display</p>
-<pre><code># xvfb - X server display
+</code></pre><h5 id="Configure-Xvfb-virtual-headless-display"><a href="#Configure-Xvfb-virtual-headless-display" class="headerlink" title="Configure Xvfb virtual/headless display"></a>Configure Xvfb virtual/headless display</h5><pre><code># xvfb - X server display
 ADD xvfb-chromium /usr/bin/xvfb-chromium
 RUN dpkg-divert --add --rename --divert /usr/bin/google-chrome.real /usr/bin/google-chrome \
     &amp;&amp; ln -s /usr/bin/xvfb-chromium /usr/bin/google-chrome \
@@ -136,28 +150,25 @@ RUN dpkg-divert --add --rename --divert /usr/bin/google-chrome.real /usr/bin/goo
 RUN echo &quot;export DISPLAY=:20&quot; &gt;&gt; /root/.bashrc \
     &amp;&amp; echo &quot;Xvfb :20 -screen 0 1280x720x16 &amp;&quot; &gt;&gt; /root/.bashrc \
     &amp;&amp; echo &quot;service dbus start&quot; &gt;&gt; /root/.bashrc
-</code></pre><p>#####Set project dir</p>
-<pre><code># create project folder with the name VxRailProjects
+</code></pre><h5 id="Set-project-dir"><a href="#Set-project-dir" class="headerlink" title="Set project dir"></a>Set project dir</h5><pre><code># create project folder with the name VxRailProjects
 RUN mkdir /automation
 
 # project scope
 WORKDIR /automation
 RUN echo &quot;export PYTHONPATH=/VxRailProjects&quot; &gt;&gt; /root/.bashrc
-</code></pre><p>#####Install requirements packages &amp; auto framework<br>    COPY requirements.txt /tmp/requirements.txt<br>    RUN pip install -r /tmp/requirements.txt</p>
-<p>####Build/Pull the Docker image:</p>
-<pre><code># sudo docker build -t=automation_app &lt;path/to/dockerfile&gt;
-</code></pre><p>####Creating a container and running Selenium tests</p>
-<p>#####Prepare test file selenium_docker.py, save to /code<br>    from selenium import webdriver</p>
-<pre><code>driver = webdriver.Chrome()
+</code></pre><h5 id="Install-requirements-packages-amp-auto-framework"><a href="#Install-requirements-packages-amp-auto-framework" class="headerlink" title="Install requirements packages &amp; auto framework"></a>Install requirements packages &amp; auto framework</h5><pre><code>COPY requirements.txt /tmp/requirements.txt
+RUN pip install -r /tmp/requirements.txt
+</code></pre><h4 id="Build-Pull-the-Docker-image"><a href="#Build-Pull-the-Docker-image" class="headerlink" title="Build/Pull the Docker image:"></a>Build/Pull the Docker image:</h4><pre><code># sudo docker build -t=automation_app &lt;path/to/dockerfile&gt;
+</code></pre><h4 id="Creating-a-container-and-running-Selenium-tests"><a href="#Creating-a-container-and-running-Selenium-tests" class="headerlink" title="Creating a container and running Selenium tests"></a>Creating a container and running Selenium tests</h4><h5 id="Prepare-test-file-selenium-docker-py-save-to-code"><a href="#Prepare-test-file-selenium-docker-py-save-to-code" class="headerlink" title="Prepare test file selenium_docker.py, save to /code"></a>Prepare test file selenium_docker.py, save to /code</h5><pre><code>from selenium import webdriver
+
+driver = webdriver.Chrome()
 driver.get(&quot;http://www.google.com&quot;)
 print(driver.title)
 driver.quit()
-</code></pre><p>#####Run an automation container</p>
-<pre><code># sudo docker run -it -v /code:/automation --name automation &lt;image name&gt; /bin/bash
-</code></pre><h5 id="Run-tests"><a href="#Run-tests" class="headerlink" title="Run      tests."></a>Run      tests.</h5><pre><code># cd /automation
+</code></pre><h5 id="Run-an-automation-container"><a href="#Run-an-automation-container" class="headerlink" title="Run an automation container"></a>Run an automation container</h5><pre><code># sudo docker run -it -v /code:/automation --name automation &lt;image name&gt; /bin/bash
+</code></pre><h5 id="Run-tests"><a href="#Run-tests" class="headerlink" title="Run tests."></a>Run tests.</h5><pre><code># cd /automation
 # python selenium_docker.py
-</code></pre><p>####Appendix:</p>
-<h5 id="Xvfb-chromium-is-shown-as-below"><a href="#Xvfb-chromium-is-shown-as-below" class="headerlink" title="Xvfb-chromium is shown as below."></a>Xvfb-chromium is shown as below.</h5><pre><code>#!/bin/bash
+</code></pre><h4 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix:"></a>Appendix:</h4><h5 id="Xvfb-chromium-is-shown-as-below"><a href="#Xvfb-chromium-is-shown-as-below" class="headerlink" title="Xvfb-chromium is shown as below."></a>Xvfb-chromium is shown as below.</h5><pre><code>#!/bin/bash
 _kill_procs() {
 kill -TERM $chromium
 wait $chromium
@@ -180,18 +191,18 @@ chromium=$!
 
 wait $chromium
 wait $xvfb
-</code></pre><h5 id="Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything"><a href="#Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything" class="headerlink" title="Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything"></a>Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything</h5><p>######1. Find DNS </p>
-<pre><code># nmcli dev show | grep &apos;IP4.DNS&apos;
+</code></pre><h5 id="Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything"><a href="#Docker-build-“Could-not-resolve-‘archive-ubuntu-com’”-apt-get-fails-to-install-anything" class="headerlink" title="Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything"></a>Docker build “Could not resolve ‘archive.ubuntu.com’” apt-get fails to install anything</h5><h6 id="1-Find-DNS"><a href="#1-Find-DNS" class="headerlink" title="1. Find DNS"></a>1. Find DNS</h6><pre><code># nmcli dev show | grep &apos;IP4.DNS&apos;
 If above result is None. 
 # cat /etc/resolv.conf | grep name
-</code></pre><p>######2. Put dns in /etc/docker/daemon.json<br>    {<br>        “dns”: [“10.0.0.2”, “10.0.0.3”]<br>    }  </p>
-<p>######3. Restart Docker service.</p>
-<pre><code># sudo service docker restart
+</code></pre><h6 id="2-Put-dns-in-etc-docker-daemon-json"><a href="#2-Put-dns-in-etc-docker-daemon-json" class="headerlink" title="2. Put dns in /etc/docker/daemon.json"></a>2. Put dns in /etc/docker/daemon.json</h6><pre><code>{                                                                         
+    &quot;dns&quot;: [&quot;10.0.0.2&quot;, &quot;10.0.0.3&quot;]                                                                          
+}  
+</code></pre><h6 id="3-Restart-Docker-service"><a href="#3-Restart-Docker-service" class="headerlink" title="3. Restart Docker service."></a>3. Restart Docker service.</h6><pre><code># sudo service docker restart
 </code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/22/docker-selenium/" data-id="cjtjs4nfx0000lejx8lvvc666" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/03/22/docker-selenium/" data-id="cjtjs984p0000msjxzg74bjoi" class="article-share-link">Teilen</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization-selenium/">virtualization, selenium</a></li></ul>
