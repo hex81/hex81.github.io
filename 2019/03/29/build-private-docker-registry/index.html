@@ -5,19 +5,19 @@
   
 
   
-  <title>How To Get Selenium Node IP Of Test Is Running | He Xin&#39;s Blog</title>
+  <title>Build Private Docker Registry For Test Environment | He Xin&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
-<meta name="keywords" content="selenium">
+  <meta name="description" content="Why we need a private Docker registry Official registry is too slow to access. Private registry is free, and it can improve our test efficiency.  We need to protect our code.">
+<meta name="keywords" content="virtualization">
 <meta property="og:type" content="article">
-<meta property="og:title" content="How To Get Selenium Node IP Of Test Is Running">
-<meta property="og:url" content="http://yoursite.com/2018/03/02/selenium-grid-node/index.html">
+<meta property="og:title" content="Build Private Docker Registry For Test Environment">
+<meta property="og:url" content="http://yoursite.com/2019/03/29/build-private-docker-registry/index.html">
 <meta property="og:site_name" content="He Xin&#39;s Blog">
-<meta property="og:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
-<meta property="og:updated_time" content="2018-03-02T08:16:31.219Z">
+<meta property="og:description" content="Why we need a private Docker registry Official registry is too slow to access. Private registry is free, and it can improve our test efficiency.  We need to protect our code.">
+<meta property="og:updated_time" content="2019-03-29T05:57:24.053Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="How To Get Selenium Node IP Of Test Is Running">
-<meta name="twitter:description" content="When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.">
+<meta name="twitter:title" content="Build Private Docker Registry For Test Environment">
+<meta name="twitter:description" content="Why we need a private Docker registry Official registry is too slow to access. Private registry is free, and it can improve our test efficiency.  We need to protect our code.">
   
     <link rel="alternate" href="/atom.xml" title="He Xin&#39;s Blog" type="application/atom+xml">
   
@@ -68,10 +68,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-selenium-grid-node" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-build-private-docker-registry" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/03/02/selenium-grid-node/" class="article-date">
-  <time datetime="2018-03-02T15:30:27.000Z" itemprop="datePublished">2018-03-02</time>
+    <a href="/2019/03/29/build-private-docker-registry/" class="article-date">
+  <time datetime="2019-03-29T10:37:39.000Z" itemprop="datePublished">2019-03-29</time>
 </a>
     
   </div>
@@ -82,7 +82,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      How To Get Selenium Node IP Of Test Is Running
+      Build Private Docker Registry For Test Environment
     </h1>
   
 
@@ -90,20 +90,73 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>When we use selenium grid to run our test cases, sometimes we need to know which node the test case is running on. We can use below steps to get node ip/hostname.<br><a id="more"></a></p>
-<h4 id="Get-Selenium-Grid-Node-IP"><a href="#Get-Selenium-Grid-Node-IP" class="headerlink" title="Get Selenium Grid Node IP"></a>Get Selenium Grid Node IP</h4><h5 id="1-Get-Session-ID"><a href="#1-Get-Session-ID" class="headerlink" title="1. Get Session ID"></a>1. Get Session ID</h5><p>If we use selenium grid for our automation testing. We can use <em>browser.driver.session_id</em> to get the ongoing session id.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">session_id = browser.driver.session_id</span><br></pre></td></tr></table></figure></p>
-<h5 id="2-Get-Node-IP"><a href="#2-Get-Node-IP" class="headerlink" title="2. Get Node IP"></a>2. Get Node IP</h5><p>Once we get the session id, we can use below request to get session information.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:<span class="comment">//&lt;grid_hub_name&gt;:&lt;grid_hub_port&gt;/grid/api/testsession?session=&lt;session_id&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>The response is shown like below.<br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"internalKey"</span>: <span class="string">"83d5756e-7eec-4a26-abc6-233be258eedb"</span>,</span><br><span class="line">	<span class="attr">"session"</span>: <span class="string">"9afaf48c-4754-48c7-a661-31c3ba37a98"</span>,</span><br><span class="line">	<span class="attr">"inactivityTime"</span>: <span class="number">119</span>,</span><br><span class="line">	<span class="attr">"proxyId"</span>: <span class="string">"http://192.168.1.25:5555"</span>, </span><br><span class="line">	<span class="attr">"msg"</span>: <span class="string">"slot found !"</span>,<span class="attr">"success"</span>: <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>Then, we can get node ip/hostname from proxyId.</p>
-<h4 id="Case"><a href="#Case" class="headerlink" title="Case"></a>Case</h4><p>In our test cases, we need to download file from browser, and validate the file. We have one selenium grid hub with four grid nodes. In our test cases, we used above method to get grid node ip, then log in the remote node to validate file content. </p>
+        <h4 id="Why-we-need-a-private-Docker-registry"><a href="#Why-we-need-a-private-Docker-registry" class="headerlink" title="Why we need a private Docker registry"></a>Why we need a private Docker registry</h4><ol>
+<li>Official registry is too slow to access. Private registry is free, and it can improve our test efficiency. </li>
+<li>We need to protect our code.</li>
+</ol>
+<a id="more"></a>
+<h4 id="Build-Private-Registry"><a href="#Build-Private-Registry" class="headerlink" title="Build Private Registry"></a>Build Private Registry</h4><p>Before build registry, Docker CE must be installed on server in advance. To get setup with Docker CE you can refer to this <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">link</a>. In this artical <em>192.168.101.100</em> is registry server ip address, <em>6000</em> is service port.</p>
+<ol>
+<li><p>Pull registry image.</p>
+<pre><code>docker pull registry
+</code></pre></li>
+<li><p>Run registry container. /opt/docker/registry is our image directory.</p>
+<pre><code>docker run -d -p 6000:5000 --name registry -v /opt/docker/registry:/var/lib/registry registry
+</code></pre></li>
+<li><p>Configure Registry HTTP Access.</p>
+<p> This method is not security but easy for test environment. Add below content into /etc/docker/daemon.json.</p>
+<pre><code>{
+       &quot;registry-mirrors&quot;:
+       [
+       &quot;http://192.168.101.100:6000&quot;
+       ],
+       &quot;insecure-registries&quot;: [&quot;192.168.101.100:6000&quot;]
+}
+</code></pre></li>
+<li><p>Restart Docker server.</p>
+<pre><code>sudo service docker restart
+</code></pre></li>
+</ol>
+<h4 id="Test-Private-Registry"><a href="#Test-Private-Registry" class="headerlink" title="Test Private Registry"></a>Test Private Registry</h4><ol>
+<li><p>Add tag for local docker image,  here <em>automation_app</em> is our image.</p>
+<pre><code>docker automation_app 192.168.101.100:6000/automation_app
+</code></pre></li>
+<li><p>Push image to registry.</p>
+<pre><code>docker push 192.168.101.100:6000/automation_app
+</code></pre></li>
+<li><p>Check image data in registry.</p>
+<pre><code># cd /opt/docker/registry &amp;&amp; ls docker/registry/v2/repositories/automation_app
+</code></pre></li>
+<li><p>Delete old image.</p>
+<pre><code>docker image rmi 192.168.101.100:6000/automation_app
+</code></pre></li>
+<li><p>Pull image from registry.</p>
+<pre><code>docker pull 192.168.101.100:6000/automation_app    
+</code></pre></li>
+</ol>
+<h4 id="Pull-Image-on-Other-Server"><a href="#Pull-Image-on-Other-Server" class="headerlink" title="Pull Image on Other Server"></a>Pull Image on Other Server</h4><ol>
+<li><p>Install Docker CE, you can refer to this <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">link</a></p>
+</li>
+<li><p>Configure Registry HTTP Access. Add below content into /etc/docker/daemon.json.</p>
+<p> Add below content into /etc/docker/daemon.json.</p>
+<pre><code>{               
+       &quot;insecure-registries&quot;: [&quot;192.168.101.100:6000&quot;]
+}
+</code></pre></li>
+</ol>
+<ol>
+<li><p>Pull image from registry.</p>
+<pre><code>docker pull 192.168.101.100:6000/automation_app
+</code></pre></li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cjtto74300005ysjx6eppwqix" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/build-private-docker-registry/" data-id="cjtto742j0000ysjx54zxplyg" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/">selenium</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
 
     </footer>
   </div>
@@ -111,19 +164,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/06/28/glusterFS-deployment/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          How To Deploy GlusterFS
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/03/02/performance_testing/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/03/22/docker-selenium/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">How We Implement Performance Testing</div>
+      <div class="article-nav-title">Dockerize Automation Test with Selenium</div>
     </a>
   
 </nav>
