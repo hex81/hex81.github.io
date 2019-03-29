@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2019/03/29/build-private-docker-registry/index.html">
 <meta property="og:site_name" content="He Xin&#39;s Blog">
 <meta property="og:description" content="Why we need a private Docker registry Official registry is too slow to access. Private registry is free, and it can improve our test efficiency.  We need to protect our code.">
-<meta property="og:updated_time" content="2019-03-29T06:16:22.372Z">
+<meta property="og:updated_time" content="2019-03-29T06:19:58.358Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Build Private Docker Registry For Test Environment">
 <meta name="twitter:description" content="Why we need a private Docker registry Official registry is too slow to access. Private registry is free, and it can improve our test efficiency.  We need to protect our code.">
@@ -138,11 +138,12 @@
 <li><p>Install Docker CE, you can refer to this <a href="https://docs.docker.com/get-started/" target="_blank" rel="noopener">link</a></p>
 </li>
 <li><p>Configure Registry HTTP Access. Add below content into /etc/docker/daemon.json.</p>
-<p> Add below content into /etc/docker/daemon.json.</p>
 <pre><code>{               
        &quot;insecure-registries&quot;: [&quot;192.168.101.100:6000&quot;]
 }
 </code></pre></li>
+</ol>
+<ol>
 <li><p>Pull image from registry.</p>
 <pre><code>docker pull 192.168.101.100:6000/automation_app
 </code></pre></li>
@@ -151,7 +152,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/build-private-docker-registry/" data-id="cjttobz7z000008jxffw5dush" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2019/03/29/build-private-docker-registry/" data-id="cjttogilb00001vjxoeti7gz7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
