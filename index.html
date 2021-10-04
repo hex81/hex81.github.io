@@ -54,7 +54,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Suche"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -65,9 +65,9 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-GTEST Combine tuple with Values" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-combine-tuple-in-gtest" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2021/10/01/GTEST Combine tuple with Values/" class="article-date">
+    <a href="/2021/10/01/combine-tuple-in-gtest/" class="article-date">
   <time datetime="2021-10-01T02:56:12.000Z" itemprop="datePublished">2021-10-01</time>
 </a>
     
@@ -75,17 +75,32 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/01/combine-tuple-in-gtest/">How to Use Combine Tuple Parameters in Gtest</a>
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <p>GTEST Combine tuple with Values</p>
-<h3 id="Scenario"><a href="#Scenario" class="headerlink" title="Scenario"></a>Scenario</h3><p>parameters are (1, 2, ‘algo1’), (1, 2, ‘algo2’), (1, 2, ‘algo2’), (1, 2, 3, ‘algo1’), (1, 2, 3, ‘algo2’), (1, 2, 3, ‘algo2’).<br>So we need to combine (1, 2) with algo1, algo2 and algo3, and combine (1, 2, 3) with algo1, algo2 and algo3.<br>The code is shown as below.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;string&gt;</span><br><span class="line">#include &lt;tuple&gt;</span><br><span class="line">#include &lt;vector&gt;</span><br><span class="line">#include &lt;gtest/gtest.h&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">std::vector&lt;std::tuple&lt;int, int, float&gt;&gt; ints;</span><br><span class="line">std::vector&lt;std::string&gt; strings;</span><br><span class="line"></span><br><span class="line">class CombinationsTest :</span><br><span class="line">    public ::testing::TestWithParam&lt;std::tuple&lt;std::tuple&lt;int, int, float&gt;, std::string&gt;&gt; &#123;&#125;;</span><br><span class="line"></span><br><span class="line">TEST_P(CombinationsTest, Basic) &#123;</span><br><span class="line">        auto param1 = std::get&lt;0&gt;(GetParam());</span><br><span class="line">  std::cout &lt;&lt; &quot;int 0: &quot;        &lt;&lt; std::get&lt;0&gt;(param1)</span><br><span class="line">            &lt;&lt; &quot;int 1: &quot; &lt;&lt; std::get&lt;1&gt;(param1)</span><br><span class="line">            &lt;&lt; &quot;int 2: &quot; &lt;&lt; std::get&lt;2&gt;(param1)</span><br><span class="line">            &lt;&lt; &quot;  string: \&quot;&quot; &lt;&lt; std::get&lt;1&gt;(GetParam())</span><br><span class="line">            &lt;&lt; &quot;\&quot;\n&quot;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">INSTANTIATE_TEST_SUITE_P(AllCombinations,</span><br><span class="line">                         CombinationsTest,</span><br><span class="line">                        ::testing::Combine(::testing::ValuesIn(ints),</span><br><span class="line">                                ::testing::ValuesIn(strings)));</span><br><span class="line"></span><br><span class="line">#define MAKE_3D(n_, c_) \</span><br><span class="line">        std::make_tuple(n_, c_, 1.2) \</span><br><span class="line"></span><br><span class="line">#define MAKE_4D(n_, c_, h_) \</span><br><span class="line">        std::make_tuple(n_, c_, h_) \</span><br><span class="line"></span><br><span class="line">int main(int argc, char **argv) &#123;</span><br><span class="line">  for (int i = 1; i &lt; 3; ++i) &#123;</span><br><span class="line">    ints.push_back(MAKE_3D(i*1, i*2));</span><br><span class="line">    ints.push_back(MAKE_4D(i*1, i*2, i*1.5));</span><br><span class="line">    strings.push_back(std::string(&quot;String &quot;) + static_cast&lt;char&gt;(i + 65));</span><br><span class="line">  &#125;</span><br><span class="line">  testing::InitGoogleTest(&amp;argc, argv);</span><br><span class="line">  return RUN_ALL_TESTS();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        <h4 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h4><p>Sometimes we need to combine different parameters in gtest. And some of the parameters are tuples, this blog will introduct a method how to use combine tuple parameters in gtest.<br>
+        
+          <p class="article-more-link">
+            <a href="/2021/10/01/combine-tuple-in-gtest/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/10/01/GTEST Combine tuple with Values/" data-id="cku8jmuyo0000869z7146n6mo" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2021/10/01/combine-tuple-in-gtest/" data-id="ckucbxtp80003v29z4cuivdwx" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
+
     </footer>
   </div>
   
@@ -124,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/10/01/some-jenkins-pipeline-skills/" data-id="cku8jmuzj000a869zmii4xv25" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2021/10/01/some-jenkins-pipeline-skills/" data-id="ckucbxtpd0009v29zzb3iuqas" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ci/">ci</a></li></ul>
@@ -167,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/02/02/how-to-dockerize-hive3/" data-id="cku8jmuzx000o869zlr96pds0" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2020/02/02/how-to-dockerize-hive3/" data-id="ckucbxtpq000nv29z3dgw9ael" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/big-data/">big data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
@@ -210,7 +225,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/01/21/pytest-allure-jenkins/" data-id="cku8jmuzc0006869zqb046cnm" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2020/01/21/pytest-allure-jenkins/" data-id="ckucbxtpt000ov29zn3j3n418" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
@@ -256,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/29/build-private-docker-registry/" data-id="cku8jmuyz0001869zjyzim3fe" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/03/29/build-private-docker-registry/" data-id="ckucbxtp00000v29z5728gpf0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
@@ -299,7 +314,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2019/03/22/docker-selenium/" data-id="cku8jmuz20002869zmkmlct1h" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2019/03/22/docker-selenium/" data-id="ckucbxtp50001v29z3kbzh6m9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/">selenium</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
@@ -345,7 +360,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="cku8jmuz80004869zjfumhmm6" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/06/28/glusterFS-deployment/" data-id="ckucbxtpa0004v29zlyxp23w0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
@@ -388,7 +403,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="cku8jmuzg0009869zqrwfbarn" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/03/02/selenium-grid-node/" data-id="ckucbxtpc0008v29zdjhus1vh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/selenium/">selenium</a></li></ul>
@@ -431,7 +446,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="cku8jmuza0005869zbqx6lzos" class="article-share-link">Teilen</a>
+      <a data-url="http://yoursite.com/2018/03/02/performance_testing/" data-id="ckucbxtpa0005v29zhib9xvqp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Test/">Test</a></li></ul>
@@ -456,7 +471,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/big-data/">big data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Test/">Test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/big-data/">big data</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ci/">ci</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/selenium/">selenium</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/virtualization/">virtualization</a></li></ul>
     </div>
   </div>
 
@@ -466,14 +481,14 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Test/" style="font-size: 15px;">Test</a> <a href="/tags/big-data/" style="font-size: 10px;">big data</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/selenium/" style="font-size: 15px;">selenium</a> <a href="/tags/virtualization/" style="font-size: 20px;">virtualization</a>
+      <a href="/tags/C/" style="font-size: 10px;">C++</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/Test/" style="font-size: 15px;">Test</a> <a href="/tags/big-data/" style="font-size: 10px;">big data</a> <a href="/tags/ci/" style="font-size: 10px;">ci</a> <a href="/tags/selenium/" style="font-size: 15px;">selenium</a> <a href="/tags/virtualization/" style="font-size: 20px;">virtualization</a>
     </div>
   </div>
 
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archiv</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/10/">October 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/06/">June 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li></ul>
     </div>
@@ -483,12 +498,12 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">letzter Beitrag</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
           <li>
-            <a href="/2021/10/01/GTEST Combine tuple with Values/">(no title)</a>
+            <a href="/2021/10/01/combine-tuple-in-gtest/">How to Use Combine Tuple Parameters in Gtest</a>
           </li>
         
           <li>
